@@ -1,6 +1,6 @@
 README
 
-PA1 - 
+PA1 - Kavi Palmer, Joseph Reiser, Lauren Young
 
 This directory contains sample code for the producer and consumer of Kafka topic.
 We use the Linux "top" command in the producer process and send its output to a
