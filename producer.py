@@ -39,6 +39,10 @@ for i in range(100):
 
     content = json.dumps(content)
 
+    content += ", { \"date\" : \""
+    content += str(dt)
+    content += "\" }"
+
     # read the contents that we wish to send as topic content
     # contents = process.read ()
 
