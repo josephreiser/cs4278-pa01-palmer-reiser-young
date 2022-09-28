@@ -16,6 +16,8 @@
 
 import os   # need this for popen
 import time # for sleep
+import requests
+import json
 from kafka import KafkaProducer  # producer of events
 
 # We can make this more sophisticated/elegant but for now it is just
@@ -23,17 +25,27 @@ from kafka import KafkaProducer  # producer of events
 
 # acquire the producer
 # (you will need to change this to your bootstrap server's IP addr)
-producer = KafkaProducer (bootstrap_servers="129.114.25.80:9092", 
+IP = input("Enter IP: ")
+producer = KafkaProducer (bootstrap_servers=IP,
                                           acks=1)  # wait for leader to write to log
 
 # say we send the contents 100 times after a sleep of 1 sec in between
 for i in range (100):
     
     # get the output of the top command
-    process = os.popen ("top -n 1 -b")
+    url = "https://bloomberg-market-and-financial-news.p.rapidapi.com/market/auto-complete"
+
+    querystring = {"query": "<REQUIRED>"}
+
+    headers = {
+        "X-RapidAPI-Key": "SIGN-UP-FOR-KEY",
+        "X-RapidAPI-Host": "bloomberg-market-and-financial-news.p.rapidapi.com"
+    }
+
+    contents = requests.request("GET", url, headers=headers, params=querystring)
 
     # read the contents that we wish to send as topic content
-    contents = process.read ()
+    #contents = process.read ()
 
     # send the contents under topic utilizations. Note that it expects
     # the contents in bytes so we convert it to bytes.
