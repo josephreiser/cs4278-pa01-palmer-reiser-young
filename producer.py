@@ -26,7 +26,7 @@ for i in range(100):
     # get the output of the top command
     url = "https://odds.p.rapidapi.com/v4/sports/upcoming/odds"
 
-    querystring = {"regions": "us", "oddsFormat": "decimal", "markets": "h2h,spreads", "dateFormat": "iso"}
+    querystring = {"regions": "us", "oddsFormat": "decimal"}
 
     headers = {
         "X-RapidAPI-Key": "da7419996emsh0f8783ada86b441p12bbe7jsn453aa0a455d5",
