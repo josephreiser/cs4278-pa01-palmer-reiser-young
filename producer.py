@@ -24,20 +24,20 @@ producer = KafkaProducer (bootstrap_servers=IP,
 # say we send the contents 100 times after a sleep of 1 sec in between
 for i in range(100):
     # get the output of the top command
-    url = "https://bb-finance.p.rapidapi.com/stock/get-statistics"
+    url = "https://odds.p.rapidapi.com/v4/sports/upcoming/odds"
 
-    querystring = {"id": "aapl:us", "template": "STOCK"}
+    querystring = {"regions": "us", "oddsFormat": "decimal", "markets": "h2h,spreads", "dateFormat": "iso"}
 
     headers = {
         "X-RapidAPI-Key": "da7419996emsh0f8783ada86b441p12bbe7jsn453aa0a455d5",
-        "X-RapidAPI-Host": "bb-finance.p.rapidapi.com"
+        "X-RapidAPI-Host": "odds.p.rapidapi.com"
     }
 
-    content = requests.request("GET", url, headers=headers, params=querystring)
+    response = requests.request("GET", url, headers=headers, params=querystring)
 
-    content = content.json()
+    contentText = response.json()
 
-    content = json.dumps(content)
+    content = json.dumps(contentText)
 
     content += ", {\"date\" : \""
     content += str(dt)
