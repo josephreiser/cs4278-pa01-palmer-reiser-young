@@ -1,28 +1,10 @@
-#
-#
-# Author: Aniruddha Gokhale
-# CS4287-5287: Principles of Cloud Computing, Vanderbilt University
-#
-# Created: Sept 6, 2020
-#
-# Purpose:
-#
-#    Demonstrate the use of Kafka Python streaming APIs.
-#    In this example, we use the "top" command and use it as producer of events for
-#    Kafka. The consumer can be another Python program that reads and dumps the
-#    information into a database OR just keeps displaying the incoming events on the
-#    command line consumer (or consumers)
-#
 
-import os   # need this for popen
-import time # for sleep
+import os  # need this for popen
+import time  # for sleep
 import requests
 import json
-from kafka import KafkaProducer
-from datetime import datetime# producer of events
-
-# We can make this more sophisticated/elegant but for now it is just
-# hardcoded to the setup I have on my local VMs
+from kafka import KafkaProducer  # producer of events
+from datetime import datetime
 
 # Getting the current date and time
 dt = datetime.now()
@@ -30,31 +12,35 @@ dt = datetime.now()
 # getting the timestamp
 ts = datetime.timestamp(dt)
 
+# We can make this more sophisticated/elegant but for now it is just
+# hardcoded to the setup I have on my local VMs
+
 # acquire the producer
 # (you will need to change this to your bootstrap server's IP addr)
 IP = input("Enter IP: ")
 producer = KafkaProducer (bootstrap_servers=IP,
-                                         acks=1)  # wait for leader to write to log
+                                        acks=1)  # wait for leader to write to log
 
 # say we send the contents 100 times after a sleep of 1 sec in between
-for i in range (100):
-
-
+for i in range(100):
     # get the output of the top command
-   url = "https://bb-finance.p.rapidapi.com/stock/get-statistics"
+    url = "https://bb-finance.p.rapidapi.com/stock/get-statistics"
 
-   querystring = {"id":"aapl:us","template":"STOCK"}
+    querystring = {"id": "aapl:us", "template": "STOCK"}
 
-   headers = {
-	"X-RapidAPI-Key": "da7419996emsh0f8783ada86b441p12bbe7jsn453aa0a455d5",
-	"X-RapidAPI-Host": "bb-finance.p.rapidapi.com"
-   }
+    headers = {
+        "X-RapidAPI-Key": "da7419996emsh0f8783ada86b441p12bbe7jsn453aa0a455d5",
+        "X-RapidAPI-Host": "bb-finance.p.rapidapi.com"
+    }
 
-   contents = requests.request("GET", url, headers=headers, params=querystring)
+    content = requests.request("GET", url, headers=headers, params=querystring)
 
+    content = content.json()
+
+    content = json.dumps(content)
 
     # read the contents that we wish to send as topic content
-    #contents = process.read ()
+    # contents = process.read ()
 
     # send the contents under topic utilizations. Note that it expects
     # the contents in bytes so we convert it to bytes.
@@ -64,11 +50,11 @@ for i in range (100):
     # You will need to modify it to send a JSON structure, say something
     # like <timestamp, contents of top>
     #
-   producer.send ("utilizations", value=bytes (contents, 'ascii'))
-   producer.flush ()   # try to empty the sending buffer
+    producer.send ("utilizations", value=bytes (content, 'ascii'))
+    producer.flush ()   # try to empty the sending buffer
 
     # sleep a second
-   time.sleep (1)
+    time.sleep(1)
 
 # we are done
 producer.close ()
