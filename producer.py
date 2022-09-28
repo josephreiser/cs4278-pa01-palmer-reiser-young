@@ -27,22 +27,26 @@ from kafka import KafkaProducer  # producer of events
 # (you will need to change this to your bootstrap server's IP addr)
 IP = input("Enter IP: ")
 producer = KafkaProducer (bootstrap_servers=IP,
-                                          acks=1)  # wait for leader to write to log
+                                         acks=1)  # wait for leader to write to log
 
 # say we send the contents 100 times after a sleep of 1 sec in between
 for i in range (100):
     
+ 
+
     # get the output of the top command
-    url = "https://bloomberg-market-and-financial-news.p.rapidapi.com/market/auto-complete"
+   url = "https://bb-finance.p.rapidapi.com/stock/get-statistics"
 
-    querystring = {"query": "<REQUIRED>"}
+   querystring = {"id":"aapl:us","template":"STOCK"}
 
-    headers = {
-        "X-RapidAPI-Key": "SIGN-UP-FOR-KEY",
-        "X-RapidAPI-Host": "bloomberg-market-and-financial-news.p.rapidapi.com"
-    }
+   headers = {
+	"X-RapidAPI-Key": "da7419996emsh0f8783ada86b441p12bbe7jsn453aa0a455d5",
+	"X-RapidAPI-Host": "bb-finance.p.rapidapi.com"
+   }
 
-    contents = requests.request("GET", url, headers=headers, params=querystring)
+   content = requests.request("GET", url, headers=headers, params=querystring)
+
+   print(response.text)
 
     # read the contents that we wish to send as topic content
     #contents = process.read ()
@@ -55,11 +59,11 @@ for i in range (100):
     # You will need to modify it to send a JSON structure, say something
     # like <timestamp, contents of top>
     #
-    producer.send ("utilizations", value=bytes (contents, 'ascii'))
-    producer.flush ()   # try to empty the sending buffer
+   producer.send ("utilizations", value=bytes (contents, 'ascii'))
+   producer.flush ()   # try to empty the sending buffer
 
     # sleep a second
-    time.sleep (1)
+   time.sleep (1)
 
 # we are done
 producer.close ()
