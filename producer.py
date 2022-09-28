@@ -18,10 +18,17 @@ import os   # need this for popen
 import time # for sleep
 import requests
 import json
-from kafka import KafkaProducer  # producer of events
+from kafka import KafkaProducer
+from datetime import datetime# producer of events
 
 # We can make this more sophisticated/elegant but for now it is just
 # hardcoded to the setup I have on my local VMs
+
+# Getting the current date and time
+dt = datetime.now()
+
+# getting the timestamp
+ts = datetime.timestamp(dt)
 
 # acquire the producer
 # (you will need to change this to your bootstrap server's IP addr)
@@ -31,8 +38,7 @@ producer = KafkaProducer (bootstrap_servers=IP,
 
 # say we send the contents 100 times after a sleep of 1 sec in between
 for i in range (100):
-    
- 
+
 
     # get the output of the top command
    url = "https://bb-finance.p.rapidapi.com/stock/get-statistics"
@@ -44,9 +50,8 @@ for i in range (100):
 	"X-RapidAPI-Host": "bb-finance.p.rapidapi.com"
    }
 
-   content = requests.request("GET", url, headers=headers, params=querystring)
+   contents = requests.request("GET", url, headers=headers, params=querystring)
 
-   print(response.text)
 
     # read the contents that we wish to send as topic content
     #contents = process.read ()
