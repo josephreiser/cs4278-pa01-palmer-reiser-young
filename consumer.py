@@ -14,6 +14,7 @@
 import os   # need this for popen
 import time # for sleep
 from kafka import KafkaConsumer  # consumer of events
+import json
 
 # We can make this more sophisticated/elegant but for now it is just
 # hardcoded to the setup I have on my local VMs
@@ -38,7 +39,9 @@ for msg in consumer:
     # Note that I am not showing code to obtain the incoming data as JSON
     # nor am I showing any code to connect to a backend database sink to
     # dump the incoming data. You will have to do that for the assignment.
-    print (str(msg.value, 'ascii'))
+    msg = str(msg.value, 'ascii')
+    msg = json.loads(msg)
+    print(msg[0])
 
 # we are done. As such, we are not going to get here as the above loop
 # is a forever loop.
