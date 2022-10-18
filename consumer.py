@@ -15,6 +15,8 @@ import os   # need this for popen
 import time # for sleep
 from kafka import KafkaConsumer  # consumer of events
 import json
+import couchdb
+
 
 # We can make this more sophisticated/elegant but for now it is just
 # hardcoded to the setup I have on my local VMs
@@ -24,7 +26,11 @@ import json
 consumer = KafkaConsumer (bootstrap_servers="129.114.25.235:9092")
 
 # subscribe to topic
+couch = couchdb.Server("http://admin:group11@129.114.26.26:5984/")
 consumer.subscribe (topics=["utilizations1"])
+
+
+db = couch["utilizations"]
 
 # we keep reading and printing
 for msg in consumer:
@@ -42,6 +48,7 @@ for msg in consumer:
     msg = str(msg.value, 'ascii')
     msg = json.loads(msg)
     print(msg[0])
+    db.save(msg[0])
 
 # we are done. As such, we are not going to get here as the above loop
 # is a forever loop.
