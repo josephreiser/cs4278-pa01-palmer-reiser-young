@@ -37,7 +37,7 @@ coll = bucket.default_collection()
 consumer.subscribe (topics=["utilizations1"])
 
 
-db = couch["utilizations"]
+#db = couch["utilizations"]
 
 # we keep reading and printing
 i = 0
@@ -57,6 +57,7 @@ for msg in consumer:
     msg = json.loads(msg)
     print(msg[0])
     bucket.upsert('Data Piece ' + str(i), msg[0])
+    #db.save(msg[0])
 
 # we are done. As such, we are not going to get here as the above loop
 # is a forever loop.
