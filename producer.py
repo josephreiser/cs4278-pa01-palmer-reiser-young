@@ -17,7 +17,7 @@ ts = datetime.timestamp(dt)
 
 # acquire the producer
 # (you will need to change this to your bootstrap server's IP addr)
-producer = KafkaProducer (bootstrap_servers=129.114.25.235,
+producer = KafkaProducer (bootstrap_servers="129.114.25.235",
                                         acks=1)  # wait for leader to write to log
 
 # say we send the contents 100 times after a sleep of 1 sec in between
