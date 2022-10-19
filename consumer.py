@@ -15,7 +15,9 @@ import os   # need this for popen
 import time # for sleep
 from kafka import KafkaConsumer  # consumer of events
 import json
-import couchdb
+#import couchdb
+from couchbase.cluster import Cluster, ClusterOptions, QueryOptions
+from couchbase_core.cluster import PasswordAuthenticator
 
 
 # We can make this more sophisticated/elegant but for now it is just
@@ -26,13 +28,19 @@ import couchdb
 consumer = KafkaConsumer (bootstrap_servers="129.114.25.235:9092")
 
 # subscribe to topic
-couch = couchdb.Server("http://admin:group11@129.114.26.26:5984/")
+#couch = couchdb.Server("http://admin:group11@129.114.26.26:5984/")
+
+cluster = Cluster('couchbase://129.114.26.26', ClusterOptions(PasswordAuthenticator('group11', 'group11')))
+bucket = cluster.bucket('default')
+coll = bucket.default_collection()
+
 consumer.subscribe (topics=["utilizations1"])
 
 
 db = couch["utilizations"]
 
 # we keep reading and printing
+i = 0
 for msg in consumer:
     # what we get is a record. From this record, we are interested in printing
     # the contents of the value field. We are sure that we get only the
@@ -48,7 +56,7 @@ for msg in consumer:
     msg = str(msg.value, 'ascii')
     msg = json.loads(msg)
     print(msg[0])
-    db.save(msg[0])
+    bucket.upsert('Data Piece ' + str(i), msg[0])
 
 # we are done. As such, we are not going to get here as the above loop
 # is a forever loop.
