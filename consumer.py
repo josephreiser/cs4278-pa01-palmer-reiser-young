@@ -30,7 +30,7 @@ consumer = KafkaConsumer (bootstrap_servers="129.114.25.235:9092")
 # subscribe to topic
 #couch = couchdb.Server("http://admin:group11@129.114.26.26:5984/")
 
-cluster = Cluster('couchbase://129.114.26.26', ClusterOptions(PasswordAuthenticator('group11', 'group11')))
+cluster = Cluster('couchbase://129.114.26.26', authenticator=PasswordAuthenticator('group11', 'group11')))
 bucket = cluster.bucket('default')
 coll = bucket.default_collection()
 
