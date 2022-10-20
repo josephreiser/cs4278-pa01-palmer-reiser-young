@@ -17,7 +17,7 @@ from kafka import KafkaConsumer  # consumer of events
 import json
 #import couchdb
 from couchbase.cluster import Cluster, ClusterOptions, QueryOptions
-from couchbase_core.cluster import PasswordAuthenticator
+#from couchbase_core.cluster import PasswordAuthenticator
 
 
 # We can make this more sophisticated/elegant but for now it is just
